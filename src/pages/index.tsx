@@ -23,8 +23,8 @@ export default function Home() {
       setError('Stage 2 Rank must be between 1 and 4,000 (or 0 if not ranked)');
       return;
     }
-    if (kaitoRank > 5000 || (kaitoRank < 0 && kaitoRank !== 0)) {
-      setError('Kaito Rank must be between 1 and 5,000 (or 0 if not ranked)');
+    if (kaitoRank > 1000 || (kaitoRank < 0 && kaitoRank !== 0)) {
+      setError('Kaito Rank must be between 1 and 1,000 (or 0 if not ranked)');
       return;
     }
 
@@ -36,19 +36,16 @@ export default function Home() {
       const airdropAllocation = totalSupply * 0.10; // 10% for airdrop
 
       // Stage 1: 5% (50M tokens) for 25k participants
-      const stage1Pool = airdropAllocation * 0.05; // eslint-disable-next-line @typescript-eslint/no-unused-vars
       if (stage1Rank > 0 && stage1Rank <= 25000) {
         totalTokens += 4000 - ((stage1Rank - 1) * (4000 - 1000) / (25000 - 1));
       }
 
       // Stage 2: 2% (20M tokens) for 4k participants
-      const stage2Pool = airdropAllocation * 0.02; // eslint-disable-next-line @typescript-eslint/no-unused-vars
       if (stage2Rank > 0 && stage2Rank <= 4000) {
         totalTokens += 7500 - ((stage2Rank - 1) * (7500 - 2500) / (4000 - 1));
       }
 
       // Discord Roles: 0.5% (5M tokens) for 350 holders
-      const discordPool = airdropAllocation * 0.005; // eslint-disable-next-line @typescript-eslint/no-unused-vars
       if (discordRole === 'L3') totalTokens += 1000000 / 50;
       else if (discordRole === 'L2') totalTokens += 1500000 / 100;
       else if (discordRole === 'L1') totalTokens += 2500000 / 200;
@@ -61,10 +58,9 @@ export default function Home() {
       const nodePool = airdropAllocation * 0.0025;
       if (isNodeRunner) totalTokens += nodePool / 170;
 
-      // Yappers: 1% (10M tokens) for top 5k Kaito leaderboard
-      const yapperPool = airdropAllocation * 0.01; // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      if (kaitoRank > 0 && kaitoRank <= 5000) {
-        totalTokens += 8000 - ((kaitoRank - 1) * (10800 - 1300) / (6000 - 1));
+      // Yappers: 1% (10M tokens) for top 1k Kaito leaderboard
+      if (kaitoRank > 0 && kaitoRank <= 1000) {
+        totalTokens += 15000 - ((kaitoRank - 1) * (15000 - 5000) / (1000 - 1));
       }
 
       setResult(totalTokens);
@@ -99,8 +95,8 @@ export default function Home() {
             </label>
             <input
               type="number"
-              value={stage1Rank ?? ''}
-              onChange={(e) => setStage1Rank(Number(e.target.value) || 0)}
+              value={stage1Rank}
+              onChange={(e) => setStage1Rank(Math.min(Math.max(Number(e.target.value), 0), 25000))}
               className="mt-1 p-2 w-full border rounded-md focus:ring-pink-500 focus:border-pink-500"
               placeholder="Enter your rank"
               min={0}
@@ -114,8 +110,8 @@ export default function Home() {
             </label>
             <input
               type="number"
-              value={stage2Rank ?? ''}
-              onChange={(e) => setStage2Rank(Number(e.target.value) || 0)}
+              value={stage2Rank}
+              onChange={(e) => setStage2Rank(Math.min(Math.max(Number(e.target.value), 0), 4000))}
               className="mt-1 p-2 w-full border rounded-md focus:ring-pink-500 focus:border-pink-500"
               placeholder="Enter your rank"
               min={0}
@@ -153,16 +149,16 @@ export default function Home() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Kaito Leaderboard Rank (1-5000, leave 0 if not ranked)
+              Kaito Leaderboard Rank (1-1000, leave 0 if not ranked)
             </label>
             <input
               type="number"
-              value={kaitoRank ?? ''}
-              onChange={(e) => setKaitoRank(Number(e.target.value) || 0)}
+              value={kaitoRank}
+              onChange={(e) => setKaitoRank(Math.min(Math.max(Number(e.target.value), 0), 1000))}
               className="mt-1 p-2 w-full border rounded-md focus:ring-pink-500 focus:border-pink-500"
               placeholder="Enter your rank"
               min={0}
-              max={5000}
+              max={1000}
             />
           </div>
 
